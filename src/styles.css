@@ -1,0 +1,115 @@
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    flex:1;
+}
+
+header {
+    height: 100px;
+    background-color: #0d0a0b;
+    color: #f3eff5;
+
+    display: flex;
+    justify-content: start;
+    padding-left: 10px;
+    align-items: center;
+
+    font-weight: 900;
+    font-size: 45px;
+
+    border-bottom: 1px solid #f3eff5;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+}
+
+
+
+.sidebar {
+    width: 300px;
+    background-color: #0d0a0b;
+    height: 100%;
+    padding-inline: 10px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    background-color: #454955; 
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* sidebar */
+
+.homeSection,
+.projectSection {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.sidebarHeader {
+    color: #f3eff5;
+    border-bottom: 1px solid #f3eff5;
+    margin-bottom: 8px;
+    padding-bottom: 2px;
+}
+
+.newProjectButton {
+    all:unset;
+    width: 100%;
+}
+
+.title,
+.newProjectButton {
+    color: #f3eff5;
+    font-size: 1.4em;
+    height: 2em;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+}
+
+.title:hover,
+.newProjectButton:hover {
+    background-color: #283618;
+    text-decoration: underline;
+}
+
+
+/* dialog */
+
+#dialog {
+    background-color: #f3eff5;
+    width: clamp(400px, 20%, 500px);
+    height: 60%;
+    
+}
+
+#dialog::backdrop {
+    background-color: #606c3880;
+}
+
+.contentTitle {
+    width: 100%;
+    height: 70px;
+    background-color: #283618;
+
+    font-size: 60px;
+    color: #454955;
+
+    justify-content: center;
+    align-items: center;
+
+}
