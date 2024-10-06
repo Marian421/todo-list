@@ -1,5 +1,3 @@
-import {allTasks} from "./allTasks";
-
 export default class Project{
     constructor(name){
         this.name = name;
@@ -21,7 +19,6 @@ export default class Project{
     addTask(newTask){
        if (this.tasks.find((task) => task.getName() === newTask.getName())) return;
        this.tasks.push(newTask); 
-       allTasks.pushIntoAllTasks(newTask);
     }
 
     deleteTask(taskToDelete){

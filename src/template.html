@@ -25,10 +25,28 @@
             <form method="dialog">
                 <div class="group1">
                     <label for="projectName"></label>
-                    <input type="text" name="name" id="projectName" placeholder="Project Title" autofocus>
+                    <input type="text" name="name" id="projectName" placeholder="Project Title" autofocus required>
                 </div>
                 <input type="submit" id="js-close" value="Cancel">
                 <input type="submit" id="add" value="Add">
+            </form>
+        </div>
+    </dialog>
+
+    <dialog id="second-dialog">
+        <div class="dialog-content">
+            <p>Task</p>
+            <form method="dialog" >
+                <div class="group1"></div>
+                    <label for="taskName"></label>
+                    <input type="text" name="taskName" id="taskName" placeholder="Task Title" autofocus>
+                </div>
+                <div class="group2"></div>
+                    <label for="dueDate"></label>
+                    <input type="date" name="dueDate" id="dueDate" placeholder="Due Date" autofocus>
+                </div>
+                <input type="submit" id="closeTaskModalBtn" value="Cancel">
+                <input type="submit" id="addTaskBtn" value="Add">
             </form>
         </div>
     </dialog>

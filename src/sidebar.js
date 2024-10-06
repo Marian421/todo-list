@@ -43,17 +43,17 @@ export default function generateSidebar() {
     const projectSection = document.createElement("div");
     projectSection.classList.add("projectSection");     
 
-    const projectHeader = document.createElement("h2");
-    projectHeader.textContent = "PROJECTS";
-    projectHeader.classList.add("sidebarHeader");
+    //const projectHeader = document.createElement("h2");
+    //projectHeader.textContent = "PROJECTS";
+    //projectHeader.classList.add("sidebarHeader");
 
     //projectSection.appendChild(projectHeader);
     
     sidebar.appendChild(projectSection);
 
-    const newProjectButton = document.createElement("button");
-    newProjectButton.classList.add("newProjectButton");
-    newProjectButton.textContent = "+ New Project";
+    //const newProjectButton = document.createElement("button");
+    //newProjectButton.classList.add("newProjectButton");
+    //newProjectButton.textContent = "+ New Project";
 
   //  projectSection.appendChild(newProjectButton);
 }

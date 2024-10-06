@@ -1,14 +1,18 @@
 const allTasks = (function(){
     const listOfTasks = [];
-    const pushIntoAllTasks = (newTask) => {
+    const pushTask = (newTask) => {
         listOfTasks.push(newTask);
     }
-    const getAllTasks = () => {
+    const getTasks = () => {
         return listOfTasks;
     }
+
+    const getTodayTasks = () => {
+        
+    }
     return {
-        pushIntoAllTasks,
-        getAllTasks
+        pushTask,
+        getTasks
     }
 })();
 

@@ -8,3 +8,13 @@ import { UI } from "./UI";
 generateSidebar();
 UI.loadPage();
 
+
+/*
+    Left to do:
+        - see how to remember all tasks
+        - push tasks in project
+        - get tasks from the project
+
+
+*/ 
+
