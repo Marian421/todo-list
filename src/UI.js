@@ -1,6 +1,7 @@
 import Project from "./projects";
 import Task from "./tasks";
 import { allTasks } from "./allTasks";
+import { sub } from "date-fns";
 
 
 const UI = (function(){
@@ -12,11 +13,7 @@ const UI = (function(){
     }
     
     const initEventListeners = () => {
-        const dialog = document.querySelector("#dialog");
-        const jsCloseButton = document.querySelector("#js-close");
         const homeSection = document.querySelector(".homeSection");
-        const confirmNewProject = document.querySelector("#add");
-        const projectName = document.querySelector("#projectName");
         const taskName = document.querySelector("#taskName");
         const dueDate = document.querySelector("#dueDate");
         const content = document.querySelector(".content");
@@ -41,24 +38,6 @@ const UI = (function(){
             }
         })();
 
-
-
-        confirmNewProject.addEventListener("click", (e) =>{
-            e.preventDefault();
-            
-            const newCreatedProject = new Project(projectName.value);
-            
-            allProjects.push(newCreatedProject);
-            
-            projectName.value = "";
-            
-            emptyProjectSection();
-            
-            renderProjectSection();
-            
-            dialog.close();
-        })
-
         addTaskBtn.addEventListener("click", (e) => {
             e.preventDefault();
 
@@ -76,18 +55,27 @@ const UI = (function(){
 
             secondDialog.close();
         })
-
-        jsCloseButton.addEventListener("click", (e) => {
-            e.preventDefault();
-            projectName.value = "";
-            dialog.close();
-        })
-
         
-        
+        const submitFormFunction = (name) => {
+
+            if (projectIsValid(name)){
+                console.log("true");
+            } else {
+                console.log("false");
+            }
+            
+            const newCreatedProject = new Project(name);
+            
+            allProjects.push(newCreatedProject);
+            
+            emptyProjectSection();
+            
+            renderProjectSection();
+            
+        }
+
         const emptyContentSection = () => {
             while(content.firstChild){
-                console.log("I m getting called");
                 content.removeChild(content.firstChild);
             }            
         }
@@ -102,39 +90,42 @@ const UI = (function(){
             handleHomeSection(e);
         })
         
-        const renderContentSection = () => {
-            const project = allProjects[currentIndex.get()];
-
-            const projectTitle = document.createElement("h2");
-            projectTitle.textContent = project.getName();
-            projectTitle.classList.add("contentTitle");
-            
-            const projectTasks = project.getTasks();
-            
-            content.appendChild(projectTitle);
-
-            for(let i = 0; i < projectTasks.length; i++) {
-                const  card = document.createElement("div");
-                card.classList.add("card");
-                content.appendChild(card);
-
-                let name = projectTasks[i].getName();   
-                console.log(name);
-            }
+        const renderContentSection = (arg = "") => {
+            if (arg === ""){
+                const project = allProjects[currentIndex.get()];
     
-            const addTasksButton = document.createElement("button");
-            addTasksButton.textContent = "+ New Task";
-            addTasksButton.classList.add("addTasksButton");
-            
-            content.appendChild(addTasksButton);
+                const projectTitle = document.createElement("h2");
+                projectTitle.textContent = project.getName();
+                projectTitle.classList.add("contentTitle");
+                
+                content.appendChild(projectTitle);
+    
+                renderTasks();
+                
+                const addTasksButton = document.createElement("button");
+                addTasksButton.textContent = "+ New Task";
+                addTasksButton.classList.add("addTasksButton");
+                
+                content.appendChild(addTasksButton);
+                
+                addTasksButton.addEventListener("click", ()=> {
+                    secondDialog.showModal();
+                })
+                
+            } else if (arg === "today") {
+                emptyContentSection();
 
-            addTasksButton.addEventListener("click", ()=> {
-                secondDialog.showModal();
-            })
-            
+                const contentTitle = document.createElement("h2");
+                contentTitle.classList.add("contentTitle");
+                contentTitle.textContent = "Today's tasks";
+
+                content.appendChild(contentTitle);
+
+                renderTasks("today");
+            }
             
         }
-
+        
         const renderProjectSection = () => {
             // the header
             const projectHeader = document.createElement("h2");
@@ -157,32 +148,136 @@ const UI = (function(){
                     renderContentSection();
                 })
             }
+            //test 
+            const extentedDiv = document.createElement("div");
+            extentedDiv.classList.add("extentedDiv");
             
             const addProjectButton = document.createElement("button");
             addProjectButton.classList.add("newProjectButton");
             addProjectButton.textContent = "+ New Project";
+
+            const projectForm = document.createElement("form");
+            projectForm.classList.add("projectForm");
+            projectForm.setAttribute("display", "none");
+
+            const inputProjectName = document.createElement("input");
+            inputProjectName.setAttribute("id", "inputProjectName");
+            inputProjectName.setAttribute("type", "text");
+            inputProjectName.setAttribute("placeholder", "Project name");
+            inputProjectName.style.display = "none";
+
+            const closeForm = document.createElement("input");
+            closeForm.setAttribute("type", "submit");
+            closeForm.setAttribute("id", "closeForm");
+            closeForm.style.display = "none";
+            closeForm.value = "Close";
+
+            const submitForm = document.createElement("input");
+            submitForm.setAttribute("type", "submit");
+            submitForm.setAttribute("id", "submitForm");
+            submitForm.style.display = "none";
+            submitForm.value = "Add";
             
-            projectSection.appendChild(addProjectButton);
+
+            extentedDiv.appendChild(inputProjectName)
+            extentedDiv.appendChild(submitForm);
+            extentedDiv.appendChild(closeForm);
+            extentedDiv.appendChild(addProjectButton); 
+            
+            projectSection.appendChild(extentedDiv);
+
+            submitForm.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (inputProjectName.value.length < 1){
+                    alert("Atleast one characther");
+                } else {
+                submitFormFunction(inputProjectName.value);
+                inputProjectName.value = "";
+                inputProjectName.style.display = "none";
+                addProjectButton.style.display = "";
+                closeForm.style.display =  "none";
+                submitForm.style.display =  "none";
+                }
+            })
+
+            closeForm.addEventListener("click", (e) => {
+                e.preventDefault();
+
+                inputProjectName.value = "";
+
+                inputProjectName.style.display = "none";
+                addProjectButton.style.display = "";
+                closeForm.style.display =  "none";
+                submitForm.style.display =  "none";
+            })
             
             addProjectButton.addEventListener("click", () => {
-                dialog.showModal();
+                //dialog.showModal();
+                inputProjectName.style.display = "block";
+                addProjectButton.style.display = "none";
+                closeForm.style.display =  "inline-block";
+                submitForm.style.display =  "inline-block";
             }) 
+        }
+        
+        const renderTasks = (arg = "") => {
+            let tasksToRender = [];
+            if (arg === ""){
+                const project = allProjects[currentIndex.get()];
+                tasksToRender = project.getTasks();
+            } else if (arg === "today"){
+                tasksToRender = allTasks.getTodayTasks();
+            }
+            for(let i = 0; i < tasksToRender.length; i++) {
+                const  card = document.createElement("div");
+                card.classList.add("card");
+                content.appendChild(card);
+        
+                let name = tasksToRender[i].getName();
+                let dueDate = tasksToRender[i].getDate();   
+                console.log(name);
+                console.log(dueDate);
+        
+                const taskDiv = document.createElement("div");
+                taskDiv.classList.add("taskDiv");
+                taskDiv.textContent = name;
+                
+                const dueDateDiv = document.createElement("div");
+                dueDateDiv.classList.add("dueDateDiv");
+        
+                const untill = document.createElement("div");
+                untill.textContent = "Due Date"
+                dueDateDiv.appendChild(untill);
+        
+                const date = document.createElement("div");
+                date.textContent = dueDate;
+                dueDateDiv.appendChild(date);
+        
+                card.appendChild(taskDiv);
+                card.appendChild(dueDateDiv);
+        
+                content.appendChild(card);
+            }
+
+
+        }
+        const handleHomeSection = (e) => {
+            if(e.target.id == "title1"){
+                console.log("the eventlistener works");
+            } else if (e.target.id == "title2") {
+                renderContentSection("today");
+            }      
         }
 
         renderProjectSection();
     }
 
-    
-    const handleHomeSection = (e) => {
-        if(e.target.id == "title1"){
-            console.log("the eventlistener works");
-        }        
+    const projectIsValid = (name) => {
+        return allProjects.some((project) => name === project.getName());
     }
 
-    const clearContent = () => {
-        console.log(content.firstChild);
-    }
     
+
     return {
         loadPage
     }

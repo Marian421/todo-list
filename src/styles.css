@@ -1,9 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    margin: 0;
-    padding: 0;
     flex:1;
 }
 
@@ -46,7 +53,11 @@ header {
     width: 100%;
 
     display: flex;
+    flex: 1;
+
+    align-items: stretch;
     flex-direction: column;
+    align-items: center;
 }
 
 /* sidebar */
@@ -68,6 +79,7 @@ header {
 .newProjectButton {
     all:unset;
     width: 100%;
+    grid-column: 1/3;
 }
 
 .title,
@@ -109,12 +121,128 @@ form {
 .contentTitle {
     width: 100%;
     height: 70px;
-    background-color: #283618;
 
-    font-size: 60px;
-    color: #454955;
+    font-size: clamp(20px, 3rem, 5vw);
+    color: #f3eff5;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 8px;
+
+}
+
+
+.card {
+    display: flex;
+
+    width: min(80%, 60ch);
+    font-size: 2em;
+    background-color: #343a40;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 8px;
+
+    min-width: 0;
+    
+}
+
+.taskDiv {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    font-size: clamp(20px, 2rem, 5vw);
+
+    margin-left: 5px;
+
+    color:#f3eff5;
+}
+
+.dueDateDiv {
+    width: 150px;
+
+    font-size: clamp(20px, 1.4rem, 5vw);
+
+    color: #f3eff5;
+
+    display: flex;
+    flex-direction: column;
+    
     justify-content: center;
     align-items: center;
 
 }
+
+.card:hover {
+    cursor: pointer;
+
+    border: 1px solid black;
+}
+
+.addTasksButton {
+    all: unset;
+    padding-inline: 10px;
+
+    width: min(80%, 60ch);
+
+    box-sizing: border-box;
+
+    font-weight: 800;
+    height: 2em;
+    font-size: clamp(20px,min(2em, 5vw),5vw);
+    border-radius: 8px;
+    color: #0d0a0b;
+    background-color: #454955;
+
+    cursor: pointer;
+}
+
+.addTasksButton:hover {
+    
+    border: 2px #343a40 solid;
+    background-color: #343a40;
+}
+
+/* submit project name */
+
+.extentedDiv {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+
+    
+}
+
+#inputProjectName {
+    width: 100%;
+    font-size: 1.4em;
+
+    grid-row: 1/2;
+    grid-column: 1/3;
+}
+#submitForm {
+    all: unset;
+    background-color: #a7c957;
+} 
+
+#closeForm {
+    all: unset;
+    background-color: #bc4749;
+}
+
+#closeForm,
+#submitForm {
+    text-align: center;
+    
+    font-size: 1.5em;
+    font-weight: 500;
+    
+    cursor: pointer;
+
+    border-radius: 4px;
+}
+
+
