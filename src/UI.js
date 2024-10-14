@@ -252,7 +252,10 @@ const UI = (function () {
 
         card.appendChild(taskDiv);
         card.appendChild(dueDateDiv);
-        card.appendChild(icon);
+        
+        if (arg === ""){
+          card.appendChild(icon);
+        }
 
         card.addEventListener("mouseover", () => {
             icon.style.display = "";
