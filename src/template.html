@@ -1,40 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <header>
-        ToDo List
-    </header>
+    <script src="https://kit.fontawesome.com/4604759eeb.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <header>ToDo List</header>
 
     <div class="container">
-        <div class="sidebar">
-
-        </div>
-        <div class="content">
-            
-        </div>
+      <div class="sidebar"></div>
+      <div class="content"></div>
     </div>
-    
+
     <dialog id="second-dialog">
-        <div class="dialog-content">
-            <p>Task</p>
-            <form method="dialog" >
-                <div class="group1"></div>
-                    <label for="taskName"></label>
-                    <input type="text" name="taskName" id="taskName" placeholder="Task Title" autofocus>
-                </div>
-                <div class="group2"></div>
-                    <label for="dueDate"></label>
-                    <input type="date" name="dueDate" id="dueDate" placeholder="Due Date" autofocus>
-                </div>
-                <input type="submit" id="closeTaskModalBtn" value="Cancel">
-                <input type="submit" id="addTaskBtn" value="Add">
-            </form>
-        </div>
+      <div class="dialog-content">
+        <p>Task</p>
+        <form method="dialog">
+          <div class="group1">
+            <label for="taskName"></label>
+            <input
+              type="text"
+              name="taskName"
+              id="taskName"
+              placeholder="Task Title"
+              autofocus
+            />
+          </div>
+          <div class="group2">
+            <label for="dueDate"></label>
+            <input
+              type="date"
+              name="dueDate"
+              id="dueDate"
+              placeholder="Due Date"
+              autofocus
+            />
+          </div>
+          <input type="submit" id="closeTaskModalBtn" value="Cancel" />
+          <input type="submit" id="addTaskBtn" value="Add" />
+        </form>
+      </div>
     </dialog>
-</body>
+  </body>
 </html>

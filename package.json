@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack serve",
     "deploy": "git subtree push --prefix dist origin gh-pages",
-    "build": "webpack"
+    "build": "webpack",
+    "lint": "eslint"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +24,7 @@
     "globals": "^15.11.0",
     "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.0",
+    "prettier": "3.3.3",
     "style-loader": "^4.0.0",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
