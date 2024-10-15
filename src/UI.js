@@ -261,92 +261,96 @@ const UI = (function () {
         tasksToRender = allTasks.getImportantTasks();
       }
       for (let i = 0; i < tasksToRender.length; i++) {
-        const card = document.createElement("div");
-        card.classList.add("card");
-        content.appendChild(card);
-
-        const icon = document.createElement("i");
-        icon.classList.add("fa-regular", "fa-trash-can","icon");
-        icon.style.display = "none";
-
-        const starIcon = document.createElement("i");
-
-        if (allTasks.isImportant(tasksToRender[i].name)){
-          starIcon.classList.add("fa-solid", "fa-star", "icon");
-        } else {
-          starIcon.classList.add("fa-regular", "fa-star", "icon");
-
-        }
-
-        let name = tasksToRender[i].getName();
-        let dueDate = tasksToRender[i].getDate();
-        console.log(name);
-        console.log(dueDate);
-
-        const taskDiv = document.createElement("div");
-        taskDiv.classList.add("taskDiv");
-        taskDiv.textContent = name;
-
-        const dueDateDiv = document.createElement("div");
-        dueDateDiv.classList.add("dueDateDiv");
-
-        const untill = document.createElement("div");
-        untill.textContent = "Due Date";
-        dueDateDiv.appendChild(untill);
-
-        const date = document.createElement("div");
-        date.textContent = dueDate;
-        dueDateDiv.appendChild(date);
-
-        if(arg === "") {
-          card.appendChild(starIcon);
-        }
-
-        card.appendChild(taskDiv);
-        card.appendChild(dueDateDiv);
-        
-        if (arg === ""){
-          card.appendChild(icon);
-        }
-
-        card.addEventListener("mouseover", () => {
-          icon.style.display = "";
-        })
-
-        card.addEventListener("mouseout", () => {
-          icon.style.display = "none";
-        })
-
-        icon.addEventListener("mouseover", () => {
-          icon.classList.remove("fa-regular");
-          icon.classList.add("fa-solid");
-        });
-
-        icon.addEventListener("mouseout", () => {
-          icon.classList.remove("fa-solid");
-          icon.classList.add("fa-regular");
-        });
-
-        icon.addEventListener("click", () => {
-          allProjects[currentIndex.get()].deleteTask(name);
-          allTasks.removeTask(name);
-          //emptyContentSection();
-          renderContentSection();
-        })
-
-        starIcon.addEventListener("click", () => {
-          if (starIcon.classList.contains("fa-regular")){
-            starIcon.classList.remove("fa-regular");
-            starIcon.classList.add("fa-solid");
-            allTasks.pushImportantTask(tasksToRender[i]);
-          } else {
-            starIcon.classList.remove("fa-solid");
-            starIcon.classList.add("fa-regular");
-            allTasks.removeImportantTask(tasksToRender[i].name);
+        if (!allTasks.contains(tasksToRender[i].name)){
+          if (arg === ""){
+            allProjects[currentIndex.get()].deleteTask(tasksToRender[i].name);
           }
-        })
+          continue;
+        } else {
+          const card = document.createElement("div");
+          card.classList.add("card");
+          content.appendChild(card);
 
-        content.appendChild(card);
+          const icon = document.createElement("i");
+          icon.classList.add("fa-regular", "fa-trash-can","icon");
+          icon.style.display = "none";
+
+          const starIcon = document.createElement("i");
+
+          if (allTasks.isImportant(tasksToRender[i].name)){
+            starIcon.classList.add("fa-solid", "fa-star", "icon");
+          } else {
+            starIcon.classList.add("fa-regular", "fa-star", "icon");
+
+          }
+
+          let name = tasksToRender[i].getName();
+          let dueDate = tasksToRender[i].getDate();
+          console.log(name);
+          console.log(dueDate);
+
+          const taskDiv = document.createElement("div");
+          taskDiv.classList.add("taskDiv");
+          taskDiv.textContent = name;
+
+          const dueDateDiv = document.createElement("div");
+          dueDateDiv.classList.add("dueDateDiv");
+
+          const untill = document.createElement("div");
+          untill.textContent = "Due Date";
+          dueDateDiv.appendChild(untill);
+
+          const date = document.createElement("div");
+          date.textContent = dueDate;
+          dueDateDiv.appendChild(date);
+
+          card.appendChild(starIcon);
+          
+
+          card.appendChild(taskDiv);
+          card.appendChild(dueDateDiv);
+          
+          card.appendChild(icon);
+
+          card.addEventListener("mouseover", () => {
+            icon.style.display = "";
+          })
+
+          card.addEventListener("mouseout", () => {
+            icon.style.display = "none";
+          })
+
+          icon.addEventListener("mouseover", () => {
+            icon.classList.remove("fa-regular");
+            icon.classList.add("fa-solid");
+          });
+
+          icon.addEventListener("mouseout", () => {
+            icon.classList.remove("fa-solid");
+            icon.classList.add("fa-regular");
+          });
+
+          icon.addEventListener("click", () => {
+            allProjects[currentIndex.get()].deleteTask(name);
+            allTasks.removeTask(name);
+            //emptyContentSection();
+            renderContentSection(arg);
+          })
+
+          starIcon.addEventListener("click", () => {
+            if (starIcon.classList.contains("fa-regular")){
+              starIcon.classList.remove("fa-regular");
+              starIcon.classList.add("fa-solid");
+              allTasks.pushImportantTask(tasksToRender[i]);
+            } else {
+              starIcon.classList.remove("fa-solid");
+              starIcon.classList.add("fa-regular");
+              allTasks.removeImportantTask(tasksToRender[i].name);
+            }
+          })
+
+          content.appendChild(card);
+        }
       }
     };
     const handleHomeSection = (e) => {

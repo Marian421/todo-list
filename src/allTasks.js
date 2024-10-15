@@ -57,6 +57,10 @@ const allTasks = (function () {
     listOfTasks = listOfTasks.filter((task) => task.getName() !== name );
   }
 
+  const contains = (name) => {
+    return listOfTasks.some((task) => task.getName() === name);
+  }
+
   return {
     pushTask,
     getTasks,
@@ -67,6 +71,7 @@ const allTasks = (function () {
     removeImportantTask,
     getImportantTasks,
     isImportant,
+    contains,
   };
 })();
 
