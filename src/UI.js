@@ -55,15 +55,17 @@ const UI = (function () {
     });
 
     const submitFormFunction = (name) => {
-      if (projectIsValid(name)) {
+      if (!projectIsValid(name)) {
+        const newCreatedProject = new Project(name);
+  
+        allProjects.push(newCreatedProject);
+
         console.log("true");
       } else {
+        alert("Project exists");
         console.log("false");
       }
 
-      const newCreatedProject = new Project(name);
-
-      allProjects.push(newCreatedProject);
 
       emptyProjectSection();
 
