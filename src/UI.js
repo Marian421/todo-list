@@ -47,7 +47,7 @@ const UI = (function () {
       taskName.value = "";
       dueDate.value = "";
 
-      emptyContentSection();
+      //emptyContentSection();
 
       renderContentSection();
 
@@ -87,6 +87,7 @@ const UI = (function () {
     });
 
     const renderContentSection = (arg = "") => {
+      emptyContentSection();
       if (arg === "") {
         const project = allProjects[currentIndex.get()];
 
@@ -108,7 +109,7 @@ const UI = (function () {
           secondDialog.showModal();
         });
       } else if (arg === "today") {
-        emptyContentSection();
+        //emptyContentSection();
 
         const contentTitle = document.createElement("h2");
         contentTitle.classList.add("contentTitle");
@@ -117,6 +118,37 @@ const UI = (function () {
         content.appendChild(contentTitle);
 
         renderTasks("today");
+      } else if (arg === "nextWeek") {
+        //emptyContentSection();
+
+        const contentTitle = document.createElement("h2");
+        contentTitle.classList.add("contentTitle");
+        contentTitle.textContent = "Next week tasks";
+
+        content.appendChild(contentTitle);
+
+        renderTasks("nextWeek");
+      } else if (arg === "allTasks") {
+        //emptyContentSection();
+
+        const contentTitle = document.createElement("h2");
+        contentTitle.classList.add("contentTitle");
+        contentTitle.textContent = "All tasks";
+
+        content.appendChild(contentTitle);
+
+        renderTasks("allTasks");
+      } else if (arg === "important") {
+        //emptyContentSection();
+
+        const contentTitle = document.createElement("h2");
+        contentTitle.classList.add("contentTitle");
+        contentTitle.textContent = "Important";
+
+        content.appendChild(contentTitle);
+
+        renderTasks("important");
+
       }
     };
 
@@ -130,6 +162,7 @@ const UI = (function () {
 
       // goes through every project, and renders a button for them
       for (let i = 0; i < allProjects.length; i++) {
+
         const ProjectButton = document.createElement("button");
         ProjectButton.classList.add("newProjectButton");
         ProjectButton.textContent = allProjects[i].name;
@@ -138,7 +171,7 @@ const UI = (function () {
 
         ProjectButton.addEventListener("click", () => {
           currentIndex.set(i);
-          emptyContentSection();
+          //emptyContentSection();
           renderContentSection();
         });
       }
@@ -220,6 +253,12 @@ const UI = (function () {
         tasksToRender = project.getTasks();
       } else if (arg === "today") {
         tasksToRender = allTasks.getTodayTasks();
+      } else if (arg === "nextWeek"){
+        tasksToRender = allTasks.getNextWeekTasks();
+      } else if (arg === "allTasks") {
+        tasksToRender = allTasks.getTasks();
+      } else if (arg === "important") {
+        tasksToRender = allTasks.getImportantTasks();
       }
       for (let i = 0; i < tasksToRender.length; i++) {
         const card = document.createElement("div");
@@ -229,6 +268,15 @@ const UI = (function () {
         const icon = document.createElement("i");
         icon.classList.add("fa-regular", "fa-trash-can","icon");
         icon.style.display = "none";
+
+        const starIcon = document.createElement("i");
+
+        if (allTasks.isImportant(tasksToRender[i].name)){
+          starIcon.classList.add("fa-solid", "fa-star", "icon");
+        } else {
+          starIcon.classList.add("fa-regular", "fa-star", "icon");
+
+        }
 
         let name = tasksToRender[i].getName();
         let dueDate = tasksToRender[i].getDate();
@@ -250,6 +298,10 @@ const UI = (function () {
         date.textContent = dueDate;
         dueDateDiv.appendChild(date);
 
+        if(arg === "") {
+          card.appendChild(starIcon);
+        }
+
         card.appendChild(taskDiv);
         card.appendChild(dueDateDiv);
         
@@ -258,11 +310,11 @@ const UI = (function () {
         }
 
         card.addEventListener("mouseover", () => {
-            icon.style.display = "";
+          icon.style.display = "";
         })
 
         card.addEventListener("mouseout", () => {
-            icon.style.display = "none";
+          icon.style.display = "none";
         })
 
         icon.addEventListener("mouseover", () => {
@@ -278,8 +330,20 @@ const UI = (function () {
         icon.addEventListener("click", () => {
           allProjects[currentIndex.get()].deleteTask(name);
           allTasks.removeTask(name);
-          emptyContentSection();
+          //emptyContentSection();
           renderContentSection();
+        })
+
+        starIcon.addEventListener("click", () => {
+          if (starIcon.classList.contains("fa-regular")){
+            starIcon.classList.remove("fa-regular");
+            starIcon.classList.add("fa-solid");
+            allTasks.pushImportantTask(tasksToRender[i]);
+          } else {
+            starIcon.classList.remove("fa-solid");
+            starIcon.classList.add("fa-regular");
+            allTasks.removeImportantTask(tasksToRender[i].name);
+          }
         })
 
         content.appendChild(card);
@@ -287,9 +351,13 @@ const UI = (function () {
     };
     const handleHomeSection = (e) => {
       if (e.target.id == "title1") {
-        console.log("the eventlistener works");
+        renderContentSection("allTasks")
       } else if (e.target.id == "title2") {
         renderContentSection("today");
+      } else if (e.target.id == "title3") {
+        renderContentSection("nextWeek");
+      } else if (e.target.id == "title4") {
+        renderContentSection("important");
       }
     };
 

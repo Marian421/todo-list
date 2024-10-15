@@ -84,8 +84,9 @@ header {
 .title,
 .newProjectButton {
   color: #f3eff5;
-  font-size: 1.4em;
-  height: 2em;
+  /* font-size: 1.4em; */
+  font-size: 1.4rem;
+  height: 2.7rem;
   cursor: pointer;
 
   display: flex;
@@ -155,6 +156,7 @@ i {
 .icon {
   cursor: pointer;
 }
+
 
 .taskDiv {
   display: flex;
