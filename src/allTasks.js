@@ -22,44 +22,44 @@ const allTasks = (function () {
     });
     return todayTasks;
   };
-  
+
   const getImportantTasks = () => {
     return importantTasks;
-  }
+  };
 
   const getNextWeekTasks = () => {
     const nextWeekTasks = [];
-    
+
     listOfTasks.forEach((task) => {
       if (isSameWeek(new Date(), task.getDate())) {
         nextWeekTasks.push(task);
       }
-    })
+    });
 
     return nextWeekTasks;
-  }
+  };
 
   const pushImportantTask = (task) => {
-    if (!importantTasks.some((t) => t.getName() === task.getName())){
+    if (!importantTasks.some((t) => t.getName() === task.getName())) {
       importantTasks.push(task);
     }
-  }
+  };
 
   const removeImportantTask = (name) => {
     importantTasks = importantTasks.filter((task) => task.getName() !== name);
-  }
+  };
 
   const isImportant = (name) => {
     return importantTasks.some((task) => task.getName() === name);
-  }
+  };
 
   const removeTask = (name) => {
-    listOfTasks = listOfTasks.filter((task) => task.getName() !== name );
-  }
+    listOfTasks = listOfTasks.filter((task) => task.getName() !== name);
+  };
 
   const contains = (name) => {
     return listOfTasks.some((task) => task.getName() === name);
-  }
+  };
 
   return {
     pushTask,

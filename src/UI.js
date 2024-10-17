@@ -11,13 +11,8 @@ const UI = (function () {
 
   const initEventListeners = () => {
     const homeSection = document.querySelector(".homeSection");
-    const taskName = document.querySelector("#taskName");
-    const dueDate = document.querySelector("#dueDate");
     const content = document.querySelector(".content");
     const projectSection = document.querySelector(".projectSection");
-    const secondDialog = document.querySelector("#second-dialog");
-    const addTaskBtn = document.querySelector("#addTaskBtn");
-    const closeTaskModalBtn = document.querySelector("#closeTaskModalBtn");
     const currentIndex = (() => {
       let index = 0;
 
@@ -36,28 +31,10 @@ const UI = (function () {
       };
     })();
 
-    addTaskBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      const newCreatedTask = new Task(taskName.value, dueDate.value);
-
-      allTasks.pushTask(newCreatedTask);
-      allProjects[currentIndex.get()].addTask(newCreatedTask);
-
-      taskName.value = "";
-      dueDate.value = "";
-
-      //emptyContentSection();
-
-      renderContentSection();
-
-      secondDialog.close();
-    });
-
     const submitFormFunction = (name) => {
       if (!projectIsValid(name)) {
         const newCreatedProject = new Project(name);
-  
+
         allProjects.push(newCreatedProject);
 
         console.log("true");
@@ -66,11 +43,20 @@ const UI = (function () {
         console.log("false");
       }
 
-
       emptyProjectSection();
 
       renderProjectSection();
     };
+
+    const submitTaskFunction = (name, date) => {
+      const newTask = new Task(name, date);
+      if (allProjects[currentIndex.get()].addTask(newTask) === 0)
+      {
+        alert("task already exists");
+      } else {
+        allTasks.pushTask(newTask);
+      }
+    }
 
     const emptyContentSection = () => {
       while (content.firstChild) {
@@ -105,11 +91,64 @@ const UI = (function () {
         addTasksButton.textContent = "+ New Task";
         addTasksButton.classList.add("addTasksButton");
 
+        const tasksFormContainer = document.createElement("div");
+        tasksFormContainer.classList.add("tasksFormContainer");
+        tasksFormContainer.style.display = "none";
+
+        const inputTaskName = document.createElement("input");
+        inputTaskName.setAttribute("type", "text");
+        inputTaskName.setAttribute("name", "inputTaskName");
+        inputTaskName.setAttribute("id", "inputTaskName");
+        inputTaskName.setAttribute("placeholder", "Task description");
+
+        const inputDate = document.createElement('input');
+        inputDate.setAttribute("type", "date");
+        inputDate.setAttribute("name", "inputDate");
+        inputDate.setAttribute("id", "inputDate");
+        inputDate.valueAsDate = new Date();
+
+        const submitTask = document.createElement("input");
+        submitTask.setAttribute("type", "submit");
+        submitTask.setAttribute("name", "submitTask");
+        submitTask.setAttribute("id", "submitTask");
+        submitTask.value = "Add";
+
+        const cancelTask = document.createElement("input");
+        cancelTask.setAttribute("type", "submit");
+        cancelTask.setAttribute("name", "cancelTask");
+        cancelTask.setAttribute("id", "cancelTask");
+        cancelTask.value = "Cancel";
+
+        tasksFormContainer.appendChild(inputTaskName);
+        tasksFormContainer.appendChild(inputDate);
+        tasksFormContainer.appendChild(submitTask);
+        tasksFormContainer.appendChild(cancelTask);
+
+
+        content.appendChild(tasksFormContainer);
         content.appendChild(addTasksButton);
 
         addTasksButton.addEventListener("click", () => {
-          secondDialog.showModal();
+          addTasksButton.style.display = "none";
+          tasksFormContainer.style.display = "";
+          //secondDialog.showModal();
         });
+
+        submitTask.addEventListener("click", (e) => {
+          e.preventDefault();
+          const name = inputTaskName.value;
+          inputTaskName.value = "";
+          const date = inputDate.value;
+          inputDate.value = "";
+          submitTaskFunction(name, date);
+          addTasksButton.style.display = "";
+          renderContentSection();
+        })
+
+        cancelTask.addEventListener("click", (e) => {
+          e.preventDefault();
+          renderContentSection();
+        })
       } else if (arg === "today") {
         //emptyContentSection();
 
@@ -150,7 +189,6 @@ const UI = (function () {
         content.appendChild(contentTitle);
 
         renderTasks("important");
-
       }
     };
 
@@ -164,7 +202,6 @@ const UI = (function () {
 
       // goes through every project, and renders a button for them
       for (let i = 0; i < allProjects.length; i++) {
-
         const ProjectButton = document.createElement("button");
         ProjectButton.classList.add("newProjectButton");
         ProjectButton.textContent = allProjects[i].name;
@@ -255,7 +292,7 @@ const UI = (function () {
         tasksToRender = project.getTasks();
       } else if (arg === "today") {
         tasksToRender = allTasks.getTodayTasks();
-      } else if (arg === "nextWeek"){
+      } else if (arg === "nextWeek") {
         tasksToRender = allTasks.getNextWeekTasks();
       } else if (arg === "allTasks") {
         tasksToRender = allTasks.getTasks();
@@ -263,8 +300,8 @@ const UI = (function () {
         tasksToRender = allTasks.getImportantTasks();
       }
       for (let i = 0; i < tasksToRender.length; i++) {
-        if (!allTasks.contains(tasksToRender[i].name)){
-          if (arg === ""){
+        if (!allTasks.contains(tasksToRender[i].name)) {
+          if (arg === "") {
             allProjects[currentIndex.get()].deleteTask(tasksToRender[i].name);
           }
           continue;
@@ -274,16 +311,15 @@ const UI = (function () {
           content.appendChild(card);
 
           const icon = document.createElement("i");
-          icon.classList.add("fa-regular", "fa-trash-can","icon");
+          icon.classList.add("fa-regular", "fa-trash-can", "icon");
           icon.style.display = "none";
 
           const starIcon = document.createElement("i");
 
-          if (allTasks.isImportant(tasksToRender[i].name)){
+          if (allTasks.isImportant(tasksToRender[i].name)) {
             starIcon.classList.add("fa-solid", "fa-star", "icon");
           } else {
             starIcon.classList.add("fa-regular", "fa-star", "icon");
-
           }
 
           let name = tasksToRender[i].getName();
@@ -307,20 +343,19 @@ const UI = (function () {
           dueDateDiv.appendChild(date);
 
           card.appendChild(starIcon);
-          
 
           card.appendChild(taskDiv);
           card.appendChild(dueDateDiv);
-          
+
           card.appendChild(icon);
 
           card.addEventListener("mouseover", () => {
             icon.style.display = "";
-          })
+          });
 
           card.addEventListener("mouseout", () => {
             icon.style.display = "none";
-          })
+          });
 
           icon.addEventListener("mouseover", () => {
             icon.classList.remove("fa-regular");
@@ -337,10 +372,10 @@ const UI = (function () {
             allTasks.removeTask(name);
             //emptyContentSection();
             renderContentSection(arg);
-          })
+          });
 
           starIcon.addEventListener("click", () => {
-            if (starIcon.classList.contains("fa-regular")){
+            if (starIcon.classList.contains("fa-regular")) {
               starIcon.classList.remove("fa-regular");
               starIcon.classList.add("fa-solid");
               allTasks.pushImportantTask(tasksToRender[i]);
@@ -349,7 +384,11 @@ const UI = (function () {
               starIcon.classList.add("fa-regular");
               allTasks.removeImportantTask(tasksToRender[i].name);
             }
-          })
+
+            if (arg == "important"){
+              renderContentSection("important");
+            }
+          });
 
           content.appendChild(card);
         }
@@ -357,7 +396,7 @@ const UI = (function () {
     };
     const handleHomeSection = (e) => {
       if (e.target.id == "title1") {
-        renderContentSection("allTasks")
+        renderContentSection("allTasks");
       } else if (e.target.id == "title2") {
         renderContentSection("today");
       } else if (e.target.id == "title3") {

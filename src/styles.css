@@ -130,22 +130,79 @@ form {
   margin-top: 8px;
 }
 
-.card {
-  display: flex;
-
+.card,
+.tasksFormContainer {
+  
   width: min(80%, 60ch);
   font-size: 2em;
-  background-color: #343a40;
+  /* background-color: #343a40; */
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 8px;
-
+  
   min-width: 0;
-
-  align-items: center;
+  
 }
 
-.card:hover  i{
+.tasksFormContainer {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+  
+}
+
+.tasksForm {
+  margin: 10px;
+  padding: 10px;
+}
+
+#submitTask {
+  all: unset;
+  background-color: #a7c957;
+  grid-row: 2/3;
+  grid-column: 1/6;
+}
+
+#cancelTask {
+  all:unset;
+  background-color: #bc4749;
+  grid-row: 2/3;
+  grid-column: 6/-1;
+  width: calc(100% - 20px);
+  justify-self: end;
+}
+
+#submitTask,
+#cancelTask {
+  cursor: pointer;
+  text-align: center;
+}
+
+#inputTaskName,
+#cancelTask,
+#submitTask {
+  font-size: clamp(20px, 2rem, 5vw);
+}
+
+#inputTaskName {
+  grid-row: 1/2;
+  grid-column: 1/10;
+}
+
+#inputDate:hover {
+  cursor: pointer;
+}
+
+
+
+.card {
+  display: flex;
+  align-items: center;
+
+}
+
+.card:hover i {
   display: block;
 }
 
@@ -156,7 +213,6 @@ i {
 .icon {
   cursor: pointer;
 }
-
 
 .taskDiv {
   display: flex;
@@ -199,7 +255,7 @@ i {
   height: 2em;
   font-size: clamp(20px, min(2em, 5vw), 5vw);
   border-radius: 8px;
-  color: #f3eff5 ;
+  color: #f3eff5;
   background-color: #454955;
 
   cursor: pointer;
@@ -230,11 +286,15 @@ i {
 #submitForm {
   all: unset;
   background-color: #a7c957;
+  grid-column: 1/2;
+  grid-row: 2/3;
 }
 
 #closeForm {
   all: unset;
   background-color: #bc4749;
+  grid-column: 2/3;
+  grid-row: 2/3;
 }
 
 #closeForm,
@@ -243,6 +303,8 @@ i {
 
   font-size: 1.5em;
   font-weight: 500;
+
+  width: 100%;
 
   cursor: pointer;
 
