@@ -1,12 +1,18 @@
 import Project from "./projects";
 import Task from "./tasks";
 import { allTasks } from "./allTasks";
+import { Storage } from "./storage";
 
 const UI = (function () {
-  const allProjects = [];
+  let allProjects = [];
 
   const loadPage = () => {
+    Storage.init();
     initEventListeners();
+  };
+
+  const pushProject = (project) => {
+    allProjects.push(project);
   };
 
   const initEventListeners = () => {
@@ -34,10 +40,10 @@ const UI = (function () {
     const submitFormFunction = (name) => {
       if (!projectIsValid(name)) {
         const newCreatedProject = new Project(name);
-
         allProjects.push(newCreatedProject);
 
-        console.log("true");
+        Storage.resetProjects();
+        localStorage.setItem("projects", JSON.stringify(allProjects));
       } else {
         alert("Project exists");
         console.log("false");
@@ -50,13 +56,18 @@ const UI = (function () {
 
     const submitTaskFunction = (name, date) => {
       const newTask = new Task(name, date);
-      if (allProjects[currentIndex.get()].addTask(newTask) === 0)
-      {
+      if (allProjects[currentIndex.get()].addTask(newTask) === 0) {
         alert("task already exists");
       } else {
         allTasks.pushTask(newTask);
+
+        Storage.resetAllTasks();
+        localStorage.setItem("allTasks", JSON.stringify(allTasks.getTasks()));
+
+        Storage.resetProjects();
+        localStorage.setItem("projects", JSON.stringify(allProjects));
       }
-    }
+    };
 
     const emptyContentSection = () => {
       while (content.firstChild) {
@@ -101,7 +112,7 @@ const UI = (function () {
         inputTaskName.setAttribute("id", "inputTaskName");
         inputTaskName.setAttribute("placeholder", "Task description");
 
-        const inputDate = document.createElement('input');
+        const inputDate = document.createElement("input");
         inputDate.setAttribute("type", "date");
         inputDate.setAttribute("name", "inputDate");
         inputDate.setAttribute("id", "inputDate");
@@ -124,7 +135,6 @@ const UI = (function () {
         tasksFormContainer.appendChild(submitTask);
         tasksFormContainer.appendChild(cancelTask);
 
-
         content.appendChild(tasksFormContainer);
         content.appendChild(addTasksButton);
 
@@ -143,12 +153,12 @@ const UI = (function () {
           submitTaskFunction(name, date);
           addTasksButton.style.display = "";
           renderContentSection();
-        })
+        });
 
         cancelTask.addEventListener("click", (e) => {
           e.preventDefault();
           renderContentSection();
-        })
+        });
       } else if (arg === "today") {
         //emptyContentSection();
 
@@ -210,6 +220,7 @@ const UI = (function () {
 
         ProjectButton.addEventListener("click", () => {
           currentIndex.set(i);
+          console.log(allProjects[i].getTasks());
           //emptyContentSection();
           renderContentSection();
         });
@@ -379,13 +390,18 @@ const UI = (function () {
               starIcon.classList.remove("fa-regular");
               starIcon.classList.add("fa-solid");
               allTasks.pushImportantTask(tasksToRender[i]);
+              Storage.resetImportantTasks();
+              localStorage.setItem(
+                "importantTasks",
+                JSON.stringify(allTasks.getImportantTasks()),
+              );
             } else {
               starIcon.classList.remove("fa-solid");
               starIcon.classList.add("fa-regular");
               allTasks.removeImportantTask(tasksToRender[i].name);
             }
 
-            if (arg == "important"){
+            if (arg == "important") {
               renderContentSection("important");
             }
           });
@@ -415,6 +431,7 @@ const UI = (function () {
 
   return {
     loadPage,
+    pushProject,
   };
 })();
 

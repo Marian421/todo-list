@@ -12,6 +12,10 @@ const allTasks = (function () {
     return listOfTasks;
   };
 
+  const setTasks = (tasks) => {
+    listOfTasks = tasks;
+  };
+
   const getTodayTasks = () => {
     const todayTasks = [];
 
@@ -25,6 +29,10 @@ const allTasks = (function () {
 
   const getImportantTasks = () => {
     return importantTasks;
+  };
+
+  const setImportantTasks = (tasks) => {
+    importantTasks = tasks;
   };
 
   const getNextWeekTasks = () => {
@@ -72,6 +80,8 @@ const allTasks = (function () {
     getImportantTasks,
     isImportant,
     contains,
+    setTasks,
+    setImportantTasks,
   };
 })();
 
