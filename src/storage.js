@@ -9,7 +9,6 @@ const Storage = (() => {
       createTasks();
     }
     if (!(localStorage.getItem("projects") === null)) {
-      console.log("calling createProjects");
       createProjects();
     }
     if (!(localStorage.getItem("importantTasks") === null)) {
@@ -42,10 +41,7 @@ const Storage = (() => {
 
     for (let i = 0; i < storedProjects.length; i++) {
       const newProject = new Project(storedProjects[i].name);
-      console.log(storedProjects[i].tasks.length);
       for (let j = 0; j < storedProjects[i].tasks.length; j++) {
-        console.log("after this one ");
-        console.log(storedProjects[i].tasks[j].name);
         const newTask = new Task(
           storedProjects[i].tasks[j].name,
           storedProjects[i].tasks[j].dueDate,

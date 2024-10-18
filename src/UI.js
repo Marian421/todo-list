@@ -381,6 +381,13 @@ const UI = (function () {
           icon.addEventListener("click", () => {
             allProjects[currentIndex.get()].deleteTask(name);
             allTasks.removeTask(name);
+
+            Storage.resetAllTasks();
+            localStorage.setItem("allTasks", JSON.stringify(allTasks.getTasks()));
+
+            Storage.resetProjects();
+            localStorage.setItem("projects", JSON.stringify(allProjects));
+
             //emptyContentSection();
             renderContentSection(arg);
           });
