@@ -15,6 +15,10 @@ body {
   flex: 1;
 }
 
+.projectDiv{
+  display: flex;
+}
+
 header {
   height: 100px;
   background-color: #0d0a0b;
@@ -90,7 +94,8 @@ header {
 }
 
 .title,
-.newProjectButton {
+.newProjectButton,
+.deleteProjectIcon {
   color: #f3eff5;
   /* font-size: 1.4em; */
   font-size: 1.4rem;
@@ -99,6 +104,11 @@ header {
 
   display: flex;
   align-items: center;
+}
+
+.deleteProjectIcon {
+  background-color: #283618;
+  color:#bc4749;
 }
 
 .title:hover,

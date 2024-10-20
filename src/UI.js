@@ -19,6 +19,7 @@ const UI = (function () {
     const homeSection = document.querySelector(".homeSection");
     const content = document.querySelector(".content");
     const projectSection = document.querySelector(".projectSection");
+
     const currentIndex = (() => {
       let index = 0;
 
@@ -35,6 +36,23 @@ const UI = (function () {
         get,
         set,
       };
+    })();
+
+    const currentHomeSection = (() => {
+      let currentSection = "";
+
+      const get = () => {
+        return currentSection;
+      }
+
+      const set = (name) => {
+        currentSection = name;
+      }
+
+      return {
+        get,
+        set,
+      }
     })();
 
     const submitFormFunction = (name) => {
@@ -216,14 +234,71 @@ const UI = (function () {
         ProjectButton.classList.add("newProjectButton");
         ProjectButton.textContent = allProjects[i].name;
 
-        projectSection.appendChild(ProjectButton);
+        const projectDiv = document.createElement('div');
+
+        projectDiv.classList.add("projectDiv");
+
+        const icon = document.createElement("i");
+        icon.classList.add("fa-regular", "fa-trash-can", "deleteProjectIcon");
+        icon.style.display = "none";
+
+        projectDiv.appendChild(ProjectButton);
+
+        projectDiv.appendChild(icon);
+
+        projectSection.appendChild(projectDiv);
 
         ProjectButton.addEventListener("click", () => {
           currentIndex.set(i);
           console.log(allProjects[i].getTasks());
           //emptyContentSection();
+
+          currentHomeSection.set("");
+
           renderContentSection();
         });
+
+        icon.addEventListener("click", () => {
+          deleteThisProjectTasks(i);
+
+          allProjects.splice(i, 1);
+
+          Storage.resetProjects();
+
+          localStorage.setItem("projects", JSON.stringify(allProjects));
+          
+          emptyProjectSection();
+
+          renderProjectSection();
+
+          renderContentSection(currentHomeSection.get());
+
+          if (currentIndex.get() === i){
+            emptyContentSection();
+          }
+        })
+
+        projectDiv.addEventListener("mouseover", () => {
+          icon.style.display = "";
+        })
+        
+        icon.addEventListener("mouseover", () => {
+          ProjectButton.style.backgroundColor = "#283618";
+          ProjectButton.style.textDecoration = "underline";
+          icon.classList.remove("fa-regular");
+          icon.classList.add("fa-solid");
+        })
+
+        icon.addEventListener("mouseout", () => {
+          ProjectButton.style.backgroundColor = "";
+          ProjectButton.style.textDecoration = "";
+          icon.classList.add("fa-regular");
+          icon.classList.remove("fa-solid");
+        })
+
+        projectDiv.addEventListener("mouseout", () => {
+          icon.style.display = "none";
+        })
       }
       //test
       const extentedDiv = document.createElement("div");
@@ -240,6 +315,7 @@ const UI = (function () {
       const inputProjectName = document.createElement("input");
       inputProjectName.setAttribute("id", "inputProjectName");
       inputProjectName.setAttribute("type", "text");
+      inputProjectName.setAttribute("maxlength", 20);
       inputProjectName.setAttribute("placeholder", "Project name");
       inputProjectName.style.display = "none";
 
@@ -420,17 +496,39 @@ const UI = (function () {
     const handleHomeSection = (e) => {
       if (e.target.id == "title1") {
         renderContentSection("allTasks");
+        currentHomeSection.set("allTasks");
       } else if (e.target.id == "title2") {
         renderContentSection("today");
+        currentHomeSection.set("today");
       } else if (e.target.id == "title3") {
         renderContentSection("nextWeek");
+        currentHomeSection.set("nextWeek");
       } else if (e.target.id == "title4") {
         renderContentSection("important");
+        currentHomeSection.set("important");
       }
     };
 
     renderProjectSection();
   };
+
+  const deleteThisProjectTasks = (index) => {
+    const tasks = allProjects[index].getTasks();
+
+    tasks.forEach(task => {
+      allTasks.removeTask(task.getName());
+
+      if (allTasks.isImportant(task.getName())){
+        allTasks.removeImportantTask(task.getName());
+      }
+    });
+
+    Storage.resetAllTasks();
+    Storage.resetImportantTasks();
+
+    localStorage.setItem("allTasks", JSON.stringify(allTasks.getTasks()));
+    localStorage.setItem("importantTasks", JSON.stringify(allTasks.getImportantTasks()));
+  }
 
   const projectIsValid = (name) => {
     return allProjects.some((project) => name === project.getName());
