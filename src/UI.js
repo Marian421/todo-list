@@ -271,7 +271,9 @@ const UI = (function () {
 
           renderProjectSection();
 
-          renderContentSection(currentHomeSection.get());
+          if (currentHomeSection.get() !== ""){
+            renderContentSection(currentHomeSection.get());
+          }
 
           if (currentIndex.get() === i){
             emptyContentSection();
