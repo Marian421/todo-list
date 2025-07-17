@@ -3,31 +3,32 @@ import Task from "./tasks";
 import { allTasks } from "./allTasks";
 import { Storage } from "./storage";
 
+
 const UI = (function () {
-  let allProjects = [];
+  let allProjects: Project[] = [];
 
   const loadPage = () => {
     Storage.init();
     initEventListeners();
   };
 
-  const pushProject = (project) => {
+  const pushProject = (project: Project) => {
     allProjects.push(project);
   };
 
   const initEventListeners = () => {
-    const homeSection = document.querySelector(".homeSection");
-    const content = document.querySelector(".content");
-    const projectSection = document.querySelector(".projectSection");
+    const homeSection = document.querySelector(".homeSection") as HTMLLIElement;
+    const content = document.querySelector(".content") as HTMLElement;
+    const projectSection = document.querySelector(".projectSection") as HTMLElement;
 
     const currentIndex = (() => {
-      let index = 0;
+      let index: number = 0;
 
-      const get = () => {
+      const get = (): number => {
         return index;
       };
 
-      const set = (newIndex) => {
+      const set = (newIndex: number): void => {
         console.log("test");
         index = newIndex;
       };
@@ -39,13 +40,13 @@ const UI = (function () {
     })();
 
     const currentHomeSection = (() => {
-      let currentSection = "";
+      let currentSection: string = "";
 
-      const get = () => {
+      const get = (): string => {
         return currentSection;
       }
 
-      const set = (name) => {
+      const set = (name: string): void => {
         currentSection = name;
       }
 
@@ -55,9 +56,9 @@ const UI = (function () {
       }
     })();
 
-    const submitFormFunction = (name) => {
+    const submitFormFunction = (name: string) => {
       if (!projectIsValid(name)) {
-        const newCreatedProject = new Project(name);
+        const newCreatedProject: Project = new Project(name);
         allProjects.push(newCreatedProject);
 
         Storage.resetProjects();
@@ -72,8 +73,8 @@ const UI = (function () {
       renderProjectSection();
     };
 
-    const submitTaskFunction = (name, date) => {
-      const newTask = new Task(name, date);
+    const submitTaskFunction = (name: string, date: string): void => {
+      const newTask: Task = new Task(name, date);
       if (allProjects[currentIndex.get()].addTask(newTask) === 0) {
         alert("task already exists");
       } else {
@@ -87,15 +88,15 @@ const UI = (function () {
       }
     };
 
-    const emptyContentSection = () => {
+    const emptyContentSection = (): void => {
       while (content.firstChild) {
         content.removeChild(content.firstChild);
       }
     };
 
-    const emptyProjectSection = () => {
+    const emptyProjectSection = (): void => {
       while (projectSection.firstChild) {
-        projectSection.removeChild(projectSection.lastChild);
+        projectSection.removeChild(projectSection.lastChild!);
       }
     };
 
@@ -103,12 +104,12 @@ const UI = (function () {
       handleHomeSection(e);
     });
 
-    const renderContentSection = (arg = "") => {
+    const renderContentSection = (arg: string = "") => {
       emptyContentSection();
       if (arg === "") {
-        const project = allProjects[currentIndex.get()];
+        const project: Project = allProjects[currentIndex.get()];
 
-        const projectTitle = document.createElement("h2");
+        const projectTitle = document.createElement("h2") as HTMLElement;
         projectTitle.textContent = project.getName();
         projectTitle.classList.add("contentTitle");
 
@@ -116,33 +117,33 @@ const UI = (function () {
 
         renderTasks();
 
-        const addTasksButton = document.createElement("button");
+        const addTasksButton = document.createElement("button") as HTMLElement;
         addTasksButton.textContent = "+ New Task";
         addTasksButton.classList.add("addTasksButton");
 
-        const tasksFormContainer = document.createElement("div");
+        const tasksFormContainer = document.createElement("div") as HTMLElement;
         tasksFormContainer.classList.add("tasksFormContainer");
         tasksFormContainer.style.display = "none";
 
-        const inputTaskName = document.createElement("input");
+        const inputTaskName = document.createElement("input") as HTMLInputElement;
         inputTaskName.setAttribute("type", "text");
         inputTaskName.setAttribute("name", "inputTaskName");
         inputTaskName.setAttribute("id", "inputTaskName");
         inputTaskName.setAttribute("placeholder", "Task description");
 
-        const inputDate = document.createElement("input");
+        const inputDate = document.createElement("input") as HTMLInputElement;
         inputDate.setAttribute("type", "date");
         inputDate.setAttribute("name", "inputDate");
         inputDate.setAttribute("id", "inputDate");
         inputDate.valueAsDate = new Date();
 
-        const submitTask = document.createElement("input");
+        const submitTask = document.createElement("input") as HTMLInputElement;
         submitTask.setAttribute("type", "submit");
         submitTask.setAttribute("name", "submitTask");
         submitTask.setAttribute("id", "submitTask");
         submitTask.value = "Add";
 
-        const cancelTask = document.createElement("input");
+        const cancelTask = document.createElement("input") as HTMLInputElement;
         cancelTask.setAttribute("type", "submit");
         cancelTask.setAttribute("name", "cancelTask");
         cancelTask.setAttribute("id", "cancelTask");
@@ -180,7 +181,7 @@ const UI = (function () {
       } else if (arg === "today") {
         //emptyContentSection();
 
-        const contentTitle = document.createElement("h2");
+        const contentTitle = document.createElement("h2") as HTMLElement;
         contentTitle.classList.add("contentTitle");
         contentTitle.textContent = "Today's tasks";
 
@@ -190,7 +191,7 @@ const UI = (function () {
       } else if (arg === "nextWeek") {
         //emptyContentSection();
 
-        const contentTitle = document.createElement("h2");
+        const contentTitle = document.createElement("h2") as HTMLElement;
         contentTitle.classList.add("contentTitle");
         contentTitle.textContent = "Next week tasks";
 
@@ -200,7 +201,7 @@ const UI = (function () {
       } else if (arg === "allTasks") {
         //emptyContentSection();
 
-        const contentTitle = document.createElement("h2");
+        const contentTitle = document.createElement("h2") as HTMLElement;
         contentTitle.classList.add("contentTitle");
         contentTitle.textContent = "All tasks";
 
@@ -210,7 +211,7 @@ const UI = (function () {
       } else if (arg === "important") {
         //emptyContentSection();
 
-        const contentTitle = document.createElement("h2");
+        const contentTitle = document.createElement("h2") as HTMLElement;
         contentTitle.classList.add("contentTitle");
         contentTitle.textContent = "Important";
 
@@ -220,9 +221,9 @@ const UI = (function () {
       }
     };
 
-    const renderProjectSection = () => {
+    const renderProjectSection = (): void => {
       // the header
-      const projectHeader = document.createElement("h2");
+      const projectHeader = document.createElement("h2") as HTMLElement;
       projectHeader.textContent = "PROJECTS";
       projectHeader.classList.add("sidebarHeader");
 
@@ -230,15 +231,15 @@ const UI = (function () {
 
       // goes through every project, and renders a button for them
       for (let i = 0; i < allProjects.length; i++) {
-        const ProjectButton = document.createElement("button");
+        const ProjectButton = document.createElement("button") as HTMLButtonElement;
         ProjectButton.classList.add("newProjectButton");
-        ProjectButton.textContent = allProjects[i].name;
+        ProjectButton.textContent = allProjects[i].getName();
 
-        const projectDiv = document.createElement('div');
+        const projectDiv = document.createElement('div') as HTMLElement;
 
         projectDiv.classList.add("projectDiv");
 
-        const icon = document.createElement("i");
+        const icon = document.createElement("i") as HTMLElement;
         icon.classList.add("fa-regular", "fa-trash-can", "deleteProjectIcon");
         icon.style.display = "none";
 
@@ -317,7 +318,7 @@ const UI = (function () {
       const inputProjectName = document.createElement("input");
       inputProjectName.setAttribute("id", "inputProjectName");
       inputProjectName.setAttribute("type", "text");
-      inputProjectName.setAttribute("maxlength", 20);
+      inputProjectName.setAttribute("maxlength", "20");
       inputProjectName.setAttribute("placeholder", "Project name");
       inputProjectName.style.display = "none";
 
@@ -514,8 +515,8 @@ const UI = (function () {
     renderProjectSection();
   };
 
-  const deleteThisProjectTasks = (index) => {
-    const tasks = allProjects[index].getTasks();
+  const deleteThisProjectTasks = (index: number) => {
+    const tasks: Task[] = allProjects[index].getTasks();
 
     tasks.forEach(task => {
       allTasks.removeTask(task.getName());
@@ -532,7 +533,7 @@ const UI = (function () {
     localStorage.setItem("importantTasks", JSON.stringify(allTasks.getImportantTasks()));
   }
 
-  const projectIsValid = (name) => {
+  const projectIsValid = (name: string) => {
     return allProjects.some((project) => name === project.getName());
   };
 
