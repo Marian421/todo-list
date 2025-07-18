@@ -1,25 +1,26 @@
 const { isSameDay, isSameWeek } = require("date-fns");
+import Task from "./tasks";
 
 const allTasks = (function () {
-  let listOfTasks = [];
+  let listOfTasks: Task[] = [];
 
-  let importantTasks = [];
+  let importantTasks: Task[] = [];
 
-  const pushTask = (newTask) => {
+  const pushTask = (newTask: Task): void => {
     listOfTasks.push(newTask);
   };
-  const getTasks = () => {
+  const getTasks = (): Task[] => {
     return listOfTasks;
   };
 
-  const setTasks = (tasks) => {
+  const setTasks = (tasks: Task[]): void => {
     listOfTasks = tasks;
   };
 
   const getTodayTasks = () => {
-    const todayTasks = [];
+    const todayTasks: Task[] = [];
 
-    listOfTasks.forEach((task) => {
+    listOfTasks.forEach((task: Task): void => {
       if (isSameDay(new Date(), task.getDate())) {
         todayTasks.push(task);
       }
@@ -27,18 +28,18 @@ const allTasks = (function () {
     return todayTasks;
   };
 
-  const getImportantTasks = () => {
+  const getImportantTasks = (): Task[] => {
     return importantTasks;
   };
 
-  const setImportantTasks = (tasks) => {
+  const setImportantTasks = (tasks: Task[]): void => {
     importantTasks = tasks;
   };
 
   const getNextWeekTasks = () => {
-    const nextWeekTasks = [];
+    const nextWeekTasks: Task[] = [];
 
-    listOfTasks.forEach((task) => {
+    listOfTasks.forEach((task: Task): void => {
       if (isSameWeek(new Date(), task.getDate())) {
         nextWeekTasks.push(task);
       }
@@ -47,25 +48,25 @@ const allTasks = (function () {
     return nextWeekTasks;
   };
 
-  const pushImportantTask = (task) => {
+  const pushImportantTask = (task: Task): void => {
     if (!importantTasks.some((t) => t.getName() === task.getName())) {
       importantTasks.push(task);
     }
   };
 
-  const removeImportantTask = (name) => {
+  const removeImportantTask = (name: string): void => {
     importantTasks = importantTasks.filter((task) => task.getName() !== name);
   };
 
-  const isImportant = (name) => {
+  const isImportant = (name: string): boolean => {
     return importantTasks.some((task) => task.getName() === name);
   };
 
-  const removeTask = (name) => {
+  const removeTask = (name: string): void => {
     listOfTasks = listOfTasks.filter((task) => task.getName() !== name);
   };
 
-  const contains = (name) => {
+  const contains = (name: string): boolean => {
     return listOfTasks.some((task) => task.getName() === name);
   };
 

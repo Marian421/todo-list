@@ -1,19 +1,19 @@
 export default function generateSidebar() {
-  const sidebar = document.querySelector(".sidebar");
+  const sidebar = document.querySelector(".sidebar") as HTMLElement;
 
-  const homeSection = document.createElement("div");
+  const homeSection = document.createElement("div") as HTMLElement;
   homeSection.classList.add("homeSection");
 
-  const homeHeader = document.createElement("h2");
+  const homeHeader = document.createElement("h2") as HTMLElement;
   homeHeader.classList.add("sidebarHeader");
   homeHeader.textContent = "HOME";
 
   homeSection.appendChild(homeHeader);
 
-  const title1 = document.createElement("div");
-  const title2 = document.createElement("div");
-  const title3 = document.createElement("div");
-  const title4 = document.createElement("div");
+  const title1 = document.createElement("div") as HTMLElement;
+  const title2 = document.createElement("div") as HTMLElement;
+  const title3 = document.createElement("div") as HTMLElement;
+  const title4 = document.createElement("div") as HTMLElement;
 
   title1.classList.add("title");
   title2.classList.add("title");
@@ -38,7 +38,7 @@ export default function generateSidebar() {
   sidebar.appendChild(homeSection);
   //projects section
 
-  const projectSection = document.createElement("div");
+  const projectSection = document.createElement("div") as HTMLElement;
   projectSection.classList.add("projectSection");
 
   //const projectHeader = document.createElement("h2");

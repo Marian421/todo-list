@@ -376,7 +376,7 @@ const UI = (function () {
     };
 
     const renderTasks = (arg = "") => {
-      let tasksToRender = [];
+      let tasksToRender: Task[] = [];
       if (arg === "") {
         const project = allProjects[currentIndex.get()];
         tasksToRender = project.getTasks();
@@ -390,9 +390,9 @@ const UI = (function () {
         tasksToRender = allTasks.getImportantTasks();
       }
       for (let i = 0; i < tasksToRender.length; i++) {
-        if (!allTasks.contains(tasksToRender[i].name)) {
+        if (!allTasks.contains(tasksToRender[i].getName())) {
           if (arg === "") {
-            allProjects[currentIndex.get()].deleteTask(tasksToRender[i].name);
+            allProjects[currentIndex.get()].deleteTask(tasksToRender[i].getName());
           }
           continue;
         } else {
@@ -406,7 +406,7 @@ const UI = (function () {
 
           const starIcon = document.createElement("i");
 
-          if (allTasks.isImportant(tasksToRender[i].name)) {
+          if (allTasks.isImportant(tasksToRender[i].getName())) {
             starIcon.classList.add("fa-solid", "fa-star", "icon");
           } else {
             starIcon.classList.add("fa-regular", "fa-star", "icon");
@@ -484,7 +484,7 @@ const UI = (function () {
             } else {
               starIcon.classList.remove("fa-solid");
               starIcon.classList.add("fa-regular");
-              allTasks.removeImportantTask(tasksToRender[i].name);
+              allTasks.removeImportantTask(tasksToRender[i].getName());
             }
 
             if (arg == "important") {
@@ -496,17 +496,19 @@ const UI = (function () {
         }
       }
     };
-    const handleHomeSection = (e) => {
-      if (e.target.id == "title1") {
+    const handleHomeSection = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
+      if (target.id == "title1") {
         renderContentSection("allTasks");
         currentHomeSection.set("allTasks");
-      } else if (e.target.id == "title2") {
+      } else if (target.id == "title2") {
         renderContentSection("today");
         currentHomeSection.set("today");
-      } else if (e.target.id == "title3") {
+      } else if (target.id == "title3") {
         renderContentSection("nextWeek");
         currentHomeSection.set("nextWeek");
-      } else if (e.target.id == "title4") {
+      } else if (target.id == "title4") {
         renderContentSection("important");
         currentHomeSection.set("important");
       }
